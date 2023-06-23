@@ -1,44 +1,45 @@
-from sqlalchemy import ForeignKey, Integer, Numeric, Text
-from sqlalchemy.orm import mapped_column, relationship
+from __future__ import annotations
+
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import mapped_column, relationship, Mapped
+from sqlalchemy import Column
+from sqlalchemy import Table
 
 from app.db.main import Base
 
 
+user_teams = Table(
+    "user_teams",
+    Base.metadata,
+    Column("user_id", ForeignKey("users.id"), primary_key=True),
+    Column("team_id", ForeignKey("teams.id"), primary_key=True),
+)
+
+
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
 
-    id = mapped_column(Integer, primary_key=True)
-    phone = mapped_column(Text, nullable=False, unique=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    phone: Mapped[str] = mapped_column(String(255), unique=True)
+    full_name: Mapped[str] = mapped_column(String(255), nullable=True)
+
+    teams: Mapped[list[Team]] = relationship(
+        secondary=user_teams, back_populates="members"
+    )
+
+    team_managed: Mapped["Team"] = relationship(back_populates="manager")
 
 
-# example
-# class Specialty(Base):
-#     __tablename__ = "specialty"
-#
-#     id = mapped_column(Integer, primary_key=True)
-#     name = mapped_column(Text, nullable=False, unique=True)
-#
-#
-# class DoctorAccount(Base):
-#     __tablename__ = "doctor_account"
-#
-#     id = mapped_column(Integer, primary_key=True)
-#     phone = mapped_column(Text, nullable=False, unique=True)
-#     password_hash = mapped_column(Text, nullable=False, unique=True)
-#     full_name = mapped_column(Text, nullable=False)
-#     specialty_id = mapped_column(Integer, ForeignKey("specialty.id"), nullable=False)
-#     specialty = relationship(Specialty)
-#
-#
-# class SpecialItem(Base):
-#     __tablename__ = "special_item"
-#
-#     id = mapped_column(Integer, primary_key=True)
-#     name = mapped_column(Text, nullable=False)
-#     amount = mapped_column(Integer, nullable=False)
-#     price = mapped_column(Numeric(precision=8, scale=2))
-#     dosage_form = mapped_column(Text, nullable=False)
-#     manufacturer = mapped_column(Text, nullable=False)
-#     barcode = mapped_column(Text, nullable=False, unique=True)
-#     specialty_id = mapped_column(Integer, ForeignKey("specialty.id"), nullable=False)
-#     specialty = relationship(Specialty)
+class Team(Base):
+    __tablename__ = "teams"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(255))
+
+    members: Mapped[list[User]] = relationship(
+        secondary=user_teams, back_populates="teams"
+    )
+
+    manager_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    manager: Mapped["User"] = relationship(back_populates="team_managed")

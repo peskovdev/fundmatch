@@ -1,16 +1,18 @@
 [tool.poetry]
-name = "naked-musk"
+name = "FundMatchBackend"
 version = "0.1.0"
 description = ""
-authors = ["Peskov Sergey <peskovdev@proton.me>"]
+authors = ["Authors <example@mail.org>"]
 readme = "README.md"
-packages = [{include = "naked_musk"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 fastapi = "^0.98.0"
 uvicorn = "^0.22.0"
 python-dotenv = "^1.0.0"
+sqlalchemy = "^2.0.17"
+sqlalchemy-utils = "^0.41.1"
+psycopg2-binary = "^2.9.6"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -21,3 +23,22 @@ black = "^23.3.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+no_implicit_optional = true
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+known_local_folder = "app"
+lines_after_imports = 2
+multi_line_output = 3
+line_length = 100
+include_trailing_comma = true

@@ -5,7 +5,7 @@ from app.db.main import Base
 
 
 class User(Base):
-    __tablename__ = "specialty"
+    __tablename__ = "user"
 
     id = mapped_column(Integer, primary_key=True)
     phone = mapped_column(Text, nullable=False, unique=True)

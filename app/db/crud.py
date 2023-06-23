@@ -21,5 +21,8 @@ def create_user(phone: str, db: Session) -> None:
     db.commit()
 
 
-def get_user(user: int, db: Session) -> Optional[User]:
-    ...
+def get_user_by_phone(phone: str, db: Session) -> Optional[User]:
+    user = db.query(User).filter(User.phone == phone).first()
+    if user is None:
+        return None
+    return user

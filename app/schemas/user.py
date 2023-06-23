@@ -7,3 +7,4 @@ class LoginRequest(BaseModel):
 
 class ConfirmCodeRequest(BaseModel):
     code: str
+    phone: str

@@ -1,4 +1,7 @@
-from typing import Optional
+from fastapi import HTTPException
+from sqlalchemy.orm import Session
+
+from app.services.jwt_manager import create_token
 
 
 PLUGGED_CODE = "491341"
@@ -15,9 +18,10 @@ def send_sms(phone: str) -> bool:
     return False
 
 
-def handle_confirmation_code(code: str) -> tuple[bool, Optional[str]]:
+def handle_confirmation_code(code: str, phone: str, db: Session) -> str:
     """Возвращает Токен Юзера"""
     ...
     if code == PLUGGED_CODE:
-        return True, "token"
-    return False, None
+        token = create_token(phone, db)
+        return token
+    raise HTTPException(status_code=400, detail="Confirmation code is invalid")

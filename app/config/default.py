@@ -16,6 +16,8 @@ class DefaultSettings(BaseSettings):
     POSTGRES_USER: str = environ.get("POSTGRES_USER", "postgres")
     POSTGRES_PORT: int = int(environ.get("POSTGRES_PORT", "5432")[-4:])
     POSTGRES_PASSWORD: str = environ.get("POSTGRES_PASSWORD", "")
+    SECRET_KEY: str = environ.get("SECRET_KEY", "your-secret-key")
+    ALGORITHM: str = environ.get("ALGORITHM", "HS256")
 
     @property
     def database_settings(self) -> dict:

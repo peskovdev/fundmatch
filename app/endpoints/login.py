@@ -34,9 +34,6 @@ def confirm_code(code: ConfirmCodeRequest, db: Session = Depends(get_db)) -> dic
     2. При валидном коде высылает токен авторизации
     """
 
-    code_confirmation_status, token = handle_confirmation_code(code.code)
+    token = handle_confirmation_code(code.code, code.phone, db)
 
-    if code_confirmation_status is True:
-        return {"token": token}
-    else:
-        raise HTTPException(status_code=400, detail="Confirmation code is invalid")
+    return {"token": token}

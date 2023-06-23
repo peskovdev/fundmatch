@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "naked-musk"
+version = "0.1.0"
+description = ""
+authors = ["Peskov Sergey <peskovdev@proton.me>"]
+readme = "README.md"
+packages = [{include = "naked_musk"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.98.0"
+uvicorn = "^0.22.0"
+python-dotenv = "^1.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pynvim = "^0.4.3"
+isort = "^5.12.0"
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -5,6 +5,6 @@ router = APIRouter(prefix="")
 
 
 @router.get("/ping")
-def check_cart() -> tuple:
+def check_cart() -> dict:
     """Health Check"""
-    return {"message": "pong"}, 200
+    return {"message": "pong"}

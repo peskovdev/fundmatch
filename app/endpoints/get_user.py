@@ -9,7 +9,7 @@ router = APIRouter(prefix="")
 
 
 @router.get("/get")
-def get_user(db: Session = Depends(get_db)) -> tuple:
+def get_user(db: Session = Depends(get_db)) -> list:
     """Возвращает список ползователей"""
     users = db.query(User).all()
-    return users, 200
+    return users

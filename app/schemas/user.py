@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 
 
-class CreateUserRequest(BaseModel):
-    number: str
-    name: str
+class LoginRequest(BaseModel):
+    phone: str
+
+
+class ConfirmCodeRequest(BaseModel):
+    code: str

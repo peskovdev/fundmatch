@@ -1,7 +1,5 @@
 """Обработка запросов от базы данных"""
 
-from typing import Optional
-
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
@@ -35,6 +33,18 @@ def get_user_by_id(id: int, db: Session) -> User:
     if user is None:
         raise HTTPException(status_code=400, detail="User doesn't exist")
 
+    return user
+
+
+def update_username(user_id: int, full_name: str, db: Session) -> User:
+    user = db.get(User, user_id)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User doesn't exist")
+
+    user.full_name = full_name
+    db.add(user)
+    db.commit()
+    db.refresh(user)
     return user
 
 

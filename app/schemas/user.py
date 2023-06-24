@@ -10,3 +10,7 @@ class UserResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ChangeUsernameRequest(BaseModel):
+    full_name: str = "John Doe"

@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.crud import get_user_by_id, get_user_by_phone, handle_user
+from app.db.crud import get_user_by_id, get_user_by_phone, handle_user, update_username
 from app.db.main import get_db
 from app.schemas.login import ConfirmCodeRequest, LoginRequest, Token
-from app.schemas.user import UserResponse
+from app.schemas.user import UserResponse, ChangeUsernameRequest
 from app.services.jwt_manager import get_token_payload
 from app.services.login_manager import handle_confirmation_code, send_sms
 
@@ -39,6 +39,18 @@ def confirm_code(code: ConfirmCodeRequest, db: Session = Depends(get_db)) -> dic
     token = handle_confirmation_code(code.code, code.phone, db)
 
     return {"token": token}
+
+
+@router.post("/change-username", status_code=200)
+def change_username(
+    form_data: ChangeUsernameRequest,
+    token_payload: Token = Depends(get_token_payload),
+    db: Session = Depends(get_db),
+) -> UserResponse:
+
+    user = update_username(token_payload.id, form_data.full_name, db)
+
+    return UserResponse.from_orm(user)
 
 
 @router.get("/get-credentials", status_code=200)

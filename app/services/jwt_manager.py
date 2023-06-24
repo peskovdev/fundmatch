@@ -30,9 +30,6 @@ def get_token_payload(token: str = Security(APIKeyHeader(name="Authorization")))
 def create_token(phone: str, db: Session) -> str:
     user = get_user_by_phone(phone, db)
 
-    if user is None:
-        raise HTTPException(status_code=401, detail="User with this token doesn't exist")
-
     token_data = _generate_a_token(user)
     encoded_jwt = jwt.encode(token_data, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt

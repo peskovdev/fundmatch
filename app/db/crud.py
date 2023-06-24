@@ -23,17 +23,17 @@ def create_user(phone: str, db: Session) -> None:
     db.commit()
 
 
-def get_user_by_phone(phone: str, db: Session) -> Optional[User]:
+def get_user_by_phone(phone: str, db: Session) -> User:
     user = db.query(User).filter(User.phone == phone).first()
     if user is None:
-        return None
+        raise HTTPException(status_code=400, detail="User doesn't exist")
     return user
 
 
 def get_user_by_id(id: int, db: Session) -> User:
     user = db.get(User, id)
     if user is None:
-        raise HTTPException(status_code=401, detail="User doesn't exist")
+        raise HTTPException(status_code=400, detail="User doesn't exist")
 
     return user
 
@@ -58,4 +58,13 @@ def get_team(id: int, db: Session) -> Team:
     if team is None:
         raise HTTPException(status_code=400, detail="Team doesn't exist")
 
+    return team
+
+
+def add_member(team: Team, new_member: User, db: Session) -> Team:
+    team.members.append(new_member)
+
+    db.add(team)
+    db.commit()
+    db.refresh(team)
     return team

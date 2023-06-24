@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.crud import get_user_by_id, handle_user
+from app.db.crud import get_user_by_id, get_user_by_phone, handle_user
 from app.db.main import get_db
 from app.schemas.login import ConfirmCodeRequest, LoginRequest, Token
 from app.schemas.user import UserResponse
@@ -41,7 +41,7 @@ def confirm_code(code: ConfirmCodeRequest, db: Session = Depends(get_db)) -> dic
     return {"token": token}
 
 
-@router.post("/get-credentials", status_code=200)
+@router.get("/get-credentials", status_code=200)
 def get_credentials(
     token_payload: Token = Depends(get_token_payload),
     db: Session = Depends(get_db),
@@ -49,5 +49,18 @@ def get_credentials(
     """Ручка принимает токен в заголовках и возвращает данные пользователя"""
 
     user = get_user_by_id(token_payload.id, db)
+
+    return UserResponse.from_orm(user)
+
+
+@router.get("/get-user", status_code=200)
+def get_user(
+    phone: str,
+    token_payload: Token = Depends(get_token_payload),
+    db: Session = Depends(get_db),
+) -> UserResponse:
+    """Возвращает информацию о пользователе по номеру"""
+
+    user = get_user_by_phone(phone, db)
 
     return UserResponse.from_orm(user)

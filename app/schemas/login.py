@@ -8,3 +8,7 @@ class LoginRequest(BaseModel):
 class ConfirmCodeRequest(BaseModel):
     code: str = "491341"
     phone: str = "+77771119999"
+
+
+class Token(BaseModel):
+    token: str

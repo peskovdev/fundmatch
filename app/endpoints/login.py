@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.db.crud import get_user_by_id, handle_user
 from app.db.main import get_db
-from app.schemas.login import ConfirmCodeRequest, LoginRequest
+from app.schemas.login import ConfirmCodeRequest, LoginRequest, Token
 from app.schemas.user import UserResponse
 from app.services.jwt_manager import get_token_payload
 from app.services.login_handler import handle_confirmation_code, send_sms
@@ -45,7 +45,7 @@ def confirm_code(code: ConfirmCodeRequest, db: Session = Depends(get_db)) -> dic
 
 @router.post("/get-credentials", status_code=200)
 def get_credentials(
-    token_payload: dict = Depends(get_token_payload),
+    token_payload: Token = Depends(get_token_payload),
     db: Session = Depends(get_db),
 ) -> UserResponse:
     """

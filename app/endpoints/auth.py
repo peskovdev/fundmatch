@@ -9,7 +9,7 @@ from app.services.jwt_manager import get_token_payload
 from app.services.login_manager import handle_confirmation_code, send_sms
 
 
-router = APIRouter(prefix="/auth")
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/login", status_code=200)

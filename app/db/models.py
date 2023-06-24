@@ -37,3 +37,7 @@ class Team(Base):
 
     manager_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     manager: Mapped["User"] = relationship(back_populates="team_managed")
+
+    @property
+    def count_members(self):
+        return len(self.members)

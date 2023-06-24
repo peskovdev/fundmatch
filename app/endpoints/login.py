@@ -6,7 +6,7 @@ from app.db.main import get_db
 from app.schemas.login import ConfirmCodeRequest, LoginRequest, Token
 from app.schemas.user import UserResponse
 from app.services.jwt_manager import get_token_payload
-from app.services.login_handler import handle_confirmation_code, send_sms
+from app.services.login_manager import handle_confirmation_code, send_sms
 
 
 router = APIRouter(prefix="/auth")

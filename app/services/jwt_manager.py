@@ -15,6 +15,8 @@ def get_token_payload(token: str = Security(APIKeyHeader(name="Authorization")))
     """Validates token and returns decoded Token"""
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        if payload.get("id") is None:
+            raise HTTPException(status_code=400, detail="Invalid token: missing id")
         decoded_token = Token(
             id=payload.get("id"),
             full_name=str(payload.get("full_name")),

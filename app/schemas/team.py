@@ -7,7 +7,7 @@ class TeamCreateRequest(BaseModel):
     name: str = "Navi"
 
 
-class TeamCreateResponse(BaseModel):
+class TeamResponse(BaseModel):
     id: str
     name: str = "Navi"
     manager: UserResponse

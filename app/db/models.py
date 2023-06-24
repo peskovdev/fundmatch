@@ -9,8 +9,8 @@ from app.db.main import Base
 user_teams = Table(
     "user_teams",
     Base.metadata,
-    Column("user_id", ForeignKey("users.id"), primary_key=True),
-    Column("team_id", ForeignKey("teams.id"), primary_key=True),
+    Column("user_id", ForeignKey("users.id", ondelete="CASCADE"), primary_key=True),
+    Column("team_id", ForeignKey("teams.id", ondelete="CASCADE"), primary_key=True),
 )
 
 

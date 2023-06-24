@@ -22,3 +22,7 @@ services:
 
 volumes:
   postgres-data:
+
+networks:
+  fundmatch:
+    name: fundmatch

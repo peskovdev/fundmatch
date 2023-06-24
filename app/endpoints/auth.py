@@ -41,7 +41,7 @@ def confirm_code(code: ConfirmCodeRequest, db: Session = Depends(get_db)) -> dic
     return {"token": token}
 
 
-@router.post("/change-username", status_code=200)
+@router.patch("/change-username", status_code=200)
 def change_username(
     form_data: ChangeUsernameRequest,
     token_payload: Token = Depends(get_token_payload),

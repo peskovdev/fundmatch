@@ -1,7 +1,14 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.crud import add_member, create_team, get_team, get_user_by_id, remove_member
+from app.db.crud import (
+    add_member,
+    create_team,
+    get_team,
+    get_user_by_id,
+    get_user_by_phone,
+    remove_member,
+)
 from app.db.models import Team
 from app.schemas.team import TeamCreateRequest
 
@@ -33,8 +40,8 @@ def get_team_info_by_team_id(team_id: int, user_id: int, db: Session) -> Team:
     return team
 
 
-def add_team_member(new_member_id: int, team_manager_id: int, db: Session) -> Team:
-    new_member = get_user_by_id(new_member_id, db)
+def add_team_member(member_phone: str, team_manager_id: int, db: Session) -> Team:
+    new_member = get_user_by_phone(member_phone, db)
 
     team_manager = get_user_by_id(team_manager_id, db)
     team = get_team(team_manager.team_managed.id, db)

@@ -17,5 +17,9 @@ class TeamResponse(BaseModel):
         orm_mode = True
 
 
+class TeamInviteMemberRequest(BaseModel):
+    phone: str = "+77771119999"
+
+
 class TeamMemberRequest(BaseModel):
     id: int

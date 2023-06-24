@@ -3,7 +3,12 @@ from sqlalchemy.orm import Session
 
 from app.db.main import get_db
 from app.schemas.login import Token
-from app.schemas.team import TeamCreateRequest, TeamResponse, TeamMemberRequest
+from app.schemas.team import (
+    TeamCreateRequest,
+    TeamInviteMemberRequest,
+    TeamMemberRequest,
+    TeamResponse,
+)
 from app.services.jwt_manager import get_token_payload
 from app.services.team_manager import (
     add_team_member,
@@ -57,18 +62,18 @@ def get_team_by_id(
 
 @router.post("/invite", status_code=200)
 def invite_member(
-    form_data: TeamMemberRequest,
+    form_data: TeamInviteMemberRequest,
     token_payload: Token = Depends(get_token_payload),
     db: Session = Depends(get_db),
 ) -> TeamResponse:
     """Пригласить участника в команду"""
 
-    team = add_team_member(form_data.id, token_payload.id, db)
+    team = add_team_member(form_data.phone, token_payload.id, db)
 
     return TeamResponse.from_orm(team)
 
 
-@router.post("/remove-member", status_code=200)
+@router.delete("/remove-member", status_code=200)
 def remove_member(
     form_data: TeamMemberRequest,
     token_payload: Token = Depends(get_token_payload),

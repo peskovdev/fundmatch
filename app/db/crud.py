@@ -63,8 +63,14 @@ def get_team(id: int, db: Session) -> Team:
 
 def add_member(team: Team, new_member: User, db: Session) -> Team:
     team.members.append(new_member)
-
     db.add(team)
+    db.commit()
+    db.refresh(team)
+    return team
+
+
+def remove_member(team: Team, member: User, db: Session) -> Team:
+    team.members.remove(member)
     db.commit()
     db.refresh(team)
     return team

@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.crud import add_member, create_team, get_team, get_user_by_id
+from app.db.crud import add_member, create_team, get_team, get_user_by_id, remove_member
 from app.db.models import Team
 from app.schemas.team import TeamCreateRequest
 
@@ -20,7 +20,7 @@ def get_team_info(team_id: int, user_id: int, db: Session) -> Team:
     team = get_team(team_id, db)
     user = get_user_by_id(user_id, db)
     if user not in team.members:
-        raise HTTPException(status_code=401, detail="This user aren't member of the team")
+        raise HTTPException(status_code=401, detail="User is not a member of the team")
 
     return team
 
@@ -31,8 +31,28 @@ def add_team_member(new_member_id: int, team_manager_id: int, db: Session) -> Te
     team_manager = get_user_by_id(team_manager_id, db)
     team = get_team(team_manager.team_managed.id, db)
     if team is None:
-        raise HTTPException(status_code=401, detail="This user is not a team manager")
+        raise HTTPException(status_code=401, detail="User owning jwt-token is not a team manager")
 
-    add_member(team, new_member, db)
+    team = add_member(team, new_member, db)
+
+    return team
+
+
+def remove_team_member(member_id: int, team_manager_id: int, db: Session) -> Team:
+    member = get_user_by_id(member_id, db)
+
+    team_manager = get_user_by_id(team_manager_id, db)
+    if team_manager.team_managed is None:
+        raise HTTPException(status_code=401, detail="User owning jwt-token is not a team manager")
+
+    team = get_team(team_manager.team_managed.id, db)
+
+    if team is None:
+        raise HTTPException(status_code=401, detail="User owning jwt-token has invalid team")
+
+    if member not in team.members:
+        raise HTTPException(status_code=400, detail="User is not a member of the team")
+
+    team = remove_member(team, member, db)
 
     return team

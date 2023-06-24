@@ -17,5 +17,5 @@ class TeamCreateResponse(BaseModel):
         orm_mode = True
 
 
-class InviteRequest(BaseModel):
+class TeamMemberRequest(BaseModel):
     id: int

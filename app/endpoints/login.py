@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.db.crud import handle_user
 from app.db.main import get_db
-from app.schemas.user import ConfirmCodeRequest, LoginRequest
+from app.schemas.login import ConfirmCodeRequest, LoginRequest
 from app.services.login_handler import handle_confirmation_code, send_sms
 
 

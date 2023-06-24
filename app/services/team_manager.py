@@ -41,14 +41,18 @@ def get_team_info_by_team_id(team_id: int, user_id: int, db: Session) -> Team:
 
 
 def add_team_member(member_phone: str, team_manager_id: int, db: Session) -> Team:
-    new_member = get_user_by_phone(member_phone, db)
+    member = get_user_by_phone(member_phone, db)
 
     team_manager = get_user_by_id(team_manager_id, db)
-    team = get_team(team_manager.team_managed.id, db)
-    if team is None:
+    if team_manager.team_managed is None:
         raise HTTPException(status_code=401, detail="User owning jwt-token is not a team manager")
 
-    team = add_member(team, new_member, db)
+    team = get_team(team_manager.team_managed.id, db)
+
+    if team is None:
+        raise HTTPException(status_code=401, detail="User owning jwt-token has invalid team")
+
+    team = add_member(team, member, db)
 
     return team
 

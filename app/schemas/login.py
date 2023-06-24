@@ -11,4 +11,6 @@ class ConfirmCodeRequest(BaseModel):
 
 
 class Token(BaseModel):
-    token: str
+    id: int
+    full_name: str
+    phone: str

@@ -49,10 +49,9 @@ def get_credentials(
     db: Session = Depends(get_db),
 ) -> UserResponse:
     """Ручка принимает токен в заголовках и возвращает данные пользователя"""
-    user_id = token_payload.get("id")
-    if user_id is None:
+    if token_payload.id is None:
         raise HTTPException(status_code=400, detail="Invalid token: missing id")
 
-    user = get_user_by_id(user_id, db)
+    user = get_user_by_id(token_payload.id, db)
 
     return UserResponse.from_orm(user)

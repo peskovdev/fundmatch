@@ -1,7 +1,8 @@
 from typing import Any
 
 import jwt
-from fastapi import Header, HTTPException, Security
+from fastapi import HTTPException, Security
+from app.schemas.login import Token
 from fastapi.security.api_key import APIKeyHeader
 from sqlalchemy.orm import Session
 
@@ -10,11 +11,16 @@ from app.db.crud import get_user_by_phone
 from app.db.models import User
 
 
-def get_token_payload(token: str = Security(APIKeyHeader(name="Authorization"))) -> dict:
-    """Validates token and returns payload"""
+def get_token_payload(token: str = Security(APIKeyHeader(name="Authorization"))) -> Token:
+    """Validates token and returns decoded Token"""
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        return payload
+        decoded_token = Token(
+            id=payload.get("id"),
+            full_name=str(payload.get("full_name")),
+            phone=payload.get("phone"),
+        )
+        return decoded_token
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
 

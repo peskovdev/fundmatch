@@ -15,6 +15,8 @@ def get_token_payload(token: str = Security(APIKeyHeader(name="Authorization")))
     """Validates token and returns decoded Token"""
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        if payload.get("id") is None:
+            raise HTTPException(status_code=400, detail="Invalid token: missing id")
         decoded_token = Token(
             id=payload.get("id"),
             full_name=str(payload.get("full_name")),
@@ -27,9 +29,6 @@ def get_token_payload(token: str = Security(APIKeyHeader(name="Authorization")))
 
 def create_token(phone: str, db: Session) -> str:
     user = get_user_by_phone(phone, db)
-
-    if user is None:
-        raise HTTPException(status_code=401, detail="User with this token doesn't exist")
 
     token_data = _generate_a_token(user)
     encoded_jwt = jwt.encode(token_data, settings.SECRET_KEY, algorithm=settings.ALGORITHM)

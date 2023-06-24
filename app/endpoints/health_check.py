@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 
-router = APIRouter(prefix="/healthcheck")
+router = APIRouter(prefix="/healthcheck", tags=["Health check"])
 
 
 @router.get("/ping")

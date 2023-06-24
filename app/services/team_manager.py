@@ -28,6 +28,7 @@ def get_team_info(user_id: int, db: Session) -> Team:
     if len(user.teams) == 0:
         raise HTTPException(status_code=404, detail="User isn't a member of any team")
     team = user.teams.pop()
+    db.refresh(team)
     return team
 
 

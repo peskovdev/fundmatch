@@ -26,3 +26,8 @@ def get_user_by_phone(phone: str, db: Session) -> Optional[User]:
     if user is None:
         return None
     return user
+
+
+def get_user_by_id(id: int, db: Session) -> Optional[User]:
+    user = db.get(User, id)
+    return user

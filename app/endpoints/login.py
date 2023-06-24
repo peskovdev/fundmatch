@@ -1,13 +1,17 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.crud import handle_user
+from app.db.crud import get_user_by_id, handle_user
 from app.db.main import get_db
 from app.schemas.login import ConfirmCodeRequest, LoginRequest
+from app.schemas.user import UserResponse
+from app.services.jwt_manager import get_token_payload
 from app.services.login_handler import handle_confirmation_code, send_sms
 
 
-router = APIRouter(prefix="")
+router = APIRouter(prefix="/auth")
 
 
 @router.post("/login", status_code=200)
@@ -37,3 +41,20 @@ def confirm_code(code: ConfirmCodeRequest, db: Session = Depends(get_db)) -> dic
     token = handle_confirmation_code(code.code, code.phone, db)
 
     return {"token": token}
+
+
+@router.post("/get-credentials", status_code=200)
+def get_credentials(
+    token_payload: dict = Depends(get_token_payload),
+    db: Session = Depends(get_db),
+) -> UserResponse:
+    """
+    1. Принимает токен в заголовках
+    """
+    user_id = token_payload.get("id")
+    if user_id is None:
+        raise HTTPException(status_code=400, detail="Invalid token: missing id")
+
+    user = get_user_by_id(user_id, db)
+
+    return UserResponse.from_orm(user)

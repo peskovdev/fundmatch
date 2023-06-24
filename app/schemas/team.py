@@ -12,6 +12,7 @@ class TeamResponse(BaseModel):
     name: str = "Navi"
     manager: UserResponse
     members: list[UserResponse]
+    count_members: int
 
     class Config:
         orm_mode = True

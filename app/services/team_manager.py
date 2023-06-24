@@ -16,7 +16,15 @@ def handle_team(team: TeamCreateRequest, creator_id: int, db: Session) -> Team:
     return orm_team
 
 
-def get_team_info(team_id: int, user_id: int, db: Session) -> Team:
+def get_team_info(user_id: int, db: Session) -> Team:
+    user = get_user_by_id(user_id, db)
+    team = user.teams.pop()
+    if team is None:
+        raise HTTPException(status_code=200, detail="User isn't member of any team")
+    return team
+
+
+def get_team_info_by_team_id(team_id: int, user_id: int, db: Session) -> Team:
     team = get_team(team_id, db)
     user = get_user_by_id(user_id, db)
     if user not in team.members:

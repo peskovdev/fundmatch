@@ -8,6 +8,7 @@ from app.services.jwt_manager import get_token_payload
 from app.services.team_manager import (
     add_team_member,
     get_team_info,
+    get_team_info_by_team_id,
     handle_team,
     remove_team_member,
 )
@@ -29,15 +30,27 @@ def create_team(
     return TeamCreateResponse.from_orm(orm_team)
 
 
-@router.get("/{team_id}", status_code=200)
+@router.get("", status_code=200)
 def get_team(
+    token_payload: Token = Depends(get_token_payload),
+    db: Session = Depends(get_db),
+) -> TeamCreateResponse:
+    """Получить свою команду"""
+
+    team = get_team_info(token_payload.id, db)
+
+    return TeamCreateResponse.from_orm(team)
+
+
+@router.get("/{team_id}", status_code=200)
+def get_team_by_id(
     team_id: int,
     token_payload: Token = Depends(get_token_payload),
     db: Session = Depends(get_db),
 ) -> TeamCreateResponse:
     """Просмотр команды"""
 
-    team = get_team_info(team_id, token_payload.id, db)
+    team = get_team_info_by_team_id(team_id, token_payload.id, db)
 
     return TeamCreateResponse.from_orm(team)
 

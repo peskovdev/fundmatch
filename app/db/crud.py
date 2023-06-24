@@ -51,3 +51,11 @@ def create_team(team: TeamCreateRequest, user: User, db: Session) -> Team:
     db.commit()
     db.refresh(orm_team)
     return orm_team
+
+
+def get_team(id: int, db: Session) -> Team:
+    team = db.get(Team, id)
+    if team is None:
+        raise HTTPException(status_code=400, detail="Team doesn't exist")
+
+    return team

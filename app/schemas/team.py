@@ -8,6 +8,7 @@ class TeamCreateRequest(BaseModel):
 
 
 class TeamCreateResponse(BaseModel):
+    id: str
     name: str = "Navi"
     manager: UserResponse
     members: list[UserResponse]

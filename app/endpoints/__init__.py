@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from .ping import router as ping_router
-from .login import router as login_router
 from .get_user import router as get_user_router
+from .login import router as login_router
+from .ping import router as ping_router
 
 
 router = APIRouter(prefix="")

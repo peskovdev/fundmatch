@@ -2,13 +2,13 @@ from typing import Any
 
 import jwt
 from fastapi import HTTPException, Security
-from app.schemas.login import Token
 from fastapi.security.api_key import APIKeyHeader
 from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.db.crud import get_user_by_phone
 from app.db.models import User
+from app.schemas.login import Token
 
 
 def get_token_payload(token: str = Security(APIKeyHeader(name="Authorization"))) -> Token:

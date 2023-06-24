@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from app.endpoints import router
 from app.config import settings
+from app.endpoints import router
 
 
 def get_app() -> FastAPI:

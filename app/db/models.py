@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from sqlalchemy import ForeignKey, String
-from sqlalchemy.orm import mapped_column, relationship, Mapped
-from sqlalchemy import Column
-from sqlalchemy import Table
+from sqlalchemy import Column, ForeignKey, String, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.main import Base
 
@@ -24,9 +22,7 @@ class User(Base):
     phone: Mapped[str] = mapped_column(String(255), unique=True)
     full_name: Mapped[str] = mapped_column(String(255), nullable=True)
 
-    teams: Mapped[list[Team]] = relationship(
-        secondary=user_teams, back_populates="members"
-    )
+    teams: Mapped[list[Team]] = relationship(secondary=user_teams, back_populates="members")
 
     team_managed: Mapped["Team"] = relationship(back_populates="manager")
 
@@ -37,9 +33,7 @@ class Team(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(255))
 
-    members: Mapped[list[User]] = relationship(
-        secondary=user_teams, back_populates="teams"
-    )
+    members: Mapped[list[User]] = relationship(secondary=user_teams, back_populates="teams")
 
     manager_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     manager: Mapped["User"] = relationship(back_populates="team_managed")

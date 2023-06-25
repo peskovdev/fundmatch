@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.crud import get_event, get_first_user_team, get_user_by_id, save_event
-from app.db.models import Event
+from app.db.models import Event, Contribution
 from app.schemas.event import EventCreateRequest
 
 
@@ -32,6 +32,12 @@ def get_event_proc(event_id: int, user_id: int, db: Session) -> Event:
 
 
 def make_payment(event_id: int, user_id: int, db: Session) -> Event:
+    existing_contribution = (
+        db.query(Contribution).filter_by(user_id=user_id, event_id=event_id).first()
+    )
+    if existing_contribution:
+        raise HTTPException(status_code=401, detail="User already paid")
+
     user = get_user_by_id(user_id, db)
     event = get_event(event_id, db)
     event.make_payment(user)

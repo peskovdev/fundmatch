@@ -35,3 +35,16 @@ def get_event(
     event = get_event_proc(event_id, token_payload.id, db)
 
     return EventResponse.from_orm(event)
+#
+#
+# @router.get("/{event_id}")
+# def get_event(
+#     event_id: int,
+#     token_payload: Token = Depends(get_token_payload),
+#     db: Session = Depends(get_db),
+# ) -> EventResponse:
+#     """Health Check"""
+#
+#     event = get_event_proc(event_id, token_payload.id, db)
+#
+#     return EventResponse.from_orm(event)

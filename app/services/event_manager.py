@@ -29,3 +29,13 @@ def get_event_proc(event_id: int, user_id: int, db: Session) -> Event:
         raise HTTPException(status_code=401, detail="User isn't participant of event")
 
     return event
+
+
+def make_payment(event_id: int, user_id: int, db: Session) -> Event:
+    user = get_user_by_id(user_id, db)
+    event = get_event(event_id, db)
+    event.make_payment(user)
+    db.add(event)
+    db.commit()
+    db.refresh(event)
+    return event

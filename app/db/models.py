@@ -73,6 +73,7 @@ class Event(Base):
     participants: Mapped[list[User]] = relationship(
         "User", secondary=participant_events, back_populates="events"
     )
+    contributions: Mapped[list[Contribution]] = relationship("Contribution", back_populates="event")
     goal: Mapped[float] = mapped_column(Float)
     current_amount: Mapped[float] = mapped_column(Float)
     status: Mapped[str] = mapped_column(String(255))
@@ -94,9 +95,30 @@ class Event(Base):
         self.event_time = self.parse_event_time(event_time)
         self.notes = notes
 
+    def _update_current_amount(self):
+        self.current_amount = sum(contribution.amount for contribution in self.contributions)
+
+    def make_payment(self, user: User) -> None:
+        amount = self.goal/len(self.participants)
+        contribution = Contribution(user=user, event=self, amount=amount)
+        self.contributions.append(contribution)
+        self._update_current_amount()
+
     @staticmethod
     def parse_event_time(event_time: str) -> datetime:
         # Парсинг времени проведения в формате DD.MM.YYYY HH:MM
         datetime_format = "%d/%m/%Y"
         parsed_time = datetime.strptime(event_time, datetime_format)
         return parsed_time
+
+
+class Contribution(Base):
+    __tablename__ = "contributions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="SET NULL"))
+    event_id: Mapped[int] = mapped_column(Integer, ForeignKey("events.id", ondelete="SET NULL"))
+    amount: Mapped[float] = mapped_column(Float)
+
+    user: Mapped[User] = relationship("User")
+    event: Mapped[Event] = relationship("Event", back_populates="contributions")

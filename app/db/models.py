@@ -97,6 +97,6 @@ class Event(Base):
     @staticmethod
     def parse_event_time(event_time: str) -> datetime:
         # Парсинг времени проведения в формате DD.MM.YYYY HH:MM
-        datetime_format = "%d.%m.%Y %H:%M"
+        datetime_format = "%d/%m/%Y"
         parsed_time = datetime.strptime(event_time, datetime_format)
         return parsed_time

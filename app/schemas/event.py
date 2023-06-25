@@ -8,7 +8,7 @@ class EventCreateRequest(BaseModel):
     title: str = "Football 23.05.2023"
     goal: float = 75000.0
     address: str = "Алалыкина 11"
-    event_time: str = "23.05.2023 16:30"
+    event_time: str = "23/05/2023"
     notes: str = "Взять тормозки"
 
 

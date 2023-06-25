@@ -1,5 +1,5 @@
 from app.schemas.user import UserResponse
-from datetime import datetime
+from datetime import date
 from app.db.enums import EventStatus
 
 from pydantic import BaseModel
@@ -34,7 +34,7 @@ class EventSubResponse(BaseModel):
     current_amount: float
     status: EventStatus
     address: str
-    event_time: datetime
+    event_time: date
     notes: str
 
     class Config:
@@ -51,7 +51,7 @@ class EventResponse(BaseModel):
     current_amount: float
     status: EventStatus
     address: str
-    event_time: datetime
+    event_time: date
     notes: str
 
     class Config:

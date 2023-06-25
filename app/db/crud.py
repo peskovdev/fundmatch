@@ -100,3 +100,11 @@ def save_event(event: Event, db: Session) -> Event:
     db.commit()
     db.refresh(event)
     return event
+
+
+def get_event(id: int, db: Session) -> Event:
+    event = db.get(Event, id)
+    if event is None:
+        raise HTTPException(status_code=400, detail="Event doesn't exist")
+
+    return event

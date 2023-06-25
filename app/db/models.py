@@ -97,6 +97,8 @@ class Event(Base):
 
     def _update_current_amount(self):
         self.current_amount = sum(contribution.amount for contribution in self.contributions)
+        if self.current_amount >= self.goal:
+            self.status = EventStatus.MONEY_COLLECTED
 
     def make_payment(self, user: User) -> None:
         amount = self.goal/len(self.participants)

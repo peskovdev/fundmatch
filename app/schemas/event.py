@@ -32,6 +32,7 @@ class EventSubResponse(BaseModel):
     title: str = "Football 23.05.2023"
     goal: float
     current_amount: float
+    contributions: list[ContributionResponse]
     status: EventStatus
     address: str
     event_time: date
@@ -45,14 +46,14 @@ class EventResponse(BaseModel):
     id: int
     title: str = "Football 23.05.2023"
     team_id: int
-    participants: list[UserResponse]
-    contributions: list[ContributionResponse]
     goal: float
     current_amount: float
+    contributions: list[ContributionResponse]
     status: EventStatus
     address: str
     event_time: date
     notes: str
+    participants: list[UserResponse]
 
     class Config:
         orm_mode = True

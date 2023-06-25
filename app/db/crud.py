@@ -3,7 +3,7 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from app.db.models import Team, User
+from app.db.models import Team, User, Event
 from app.schemas.team import TeamCreateRequest
 
 
@@ -71,6 +71,15 @@ def get_team(id: int, db: Session) -> Team:
     return team
 
 
+def get_first_user_team(user_id: int, db: Session) -> Team:
+    team = db.query(Team).join(User.teams).filter(User.id == user_id).first()
+
+    if team is None:
+        raise HTTPException(status_code=400, detail="User isn't a member of any team")
+
+    return team
+
+
 def add_member(team: Team, new_member: User, db: Session) -> Team:
     team.members.append(new_member)
     db.add(team)
@@ -84,3 +93,10 @@ def remove_member(team: Team, member: User, db: Session) -> Team:
     db.commit()
     db.refresh(team)
     return team
+
+
+def save_event(event: Event, db: Session) -> Event:
+    db.add(event)
+    db.commit()
+    db.refresh(event)
+    return event

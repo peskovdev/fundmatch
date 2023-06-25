@@ -12,12 +12,12 @@ from app.schemas.team import (
 from app.services.jwt_manager import get_token_payload
 from app.services.team_manager import (
     add_team_member,
-    get_team_info,
     get_team_info_by_team_id,
     handle_team,
     remove_team_member,
 )
 
+from app.db.crud import get_first_user_team
 
 router = APIRouter(prefix="/team", tags=["Team"])
 
@@ -42,7 +42,7 @@ def get_team(
 ) -> TeamResponse:
     """Получить свою команду"""
 
-    team = get_team_info(token_payload.id, db)
+    team = get_first_user_team(token_payload.id, db)
 
     return TeamResponse.from_orm(team)
 

@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
-from .user import UserResponse
+from app.schemas.user import UserResponse
+from app.schemas.event import EventSubResponse
 
 
 class TeamCreateRequest(BaseModel):
@@ -12,7 +13,9 @@ class TeamResponse(BaseModel):
     name: str = "Navi"
     manager: UserResponse
     members: list[UserResponse]
+    events: list[EventSubResponse]
     count_members: int
+    count_events: int
 
     class Config:
         orm_mode = True

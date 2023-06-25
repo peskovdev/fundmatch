@@ -23,15 +23,6 @@ def handle_team(team: TeamCreateRequest, creator_id: int, db: Session) -> Team:
     return orm_team
 
 
-def get_team_info(user_id: int, db: Session) -> Team:
-    user = get_user_by_id(user_id, db)
-    if len(user.teams) == 0:
-        raise HTTPException(status_code=404, detail="User isn't a member of any team")
-    team = user.teams.pop()
-    db.refresh(team)
-    return team
-
-
 def get_team_info_by_team_id(team_id: int, user_id: int, db: Session) -> Team:
     team = get_team(team_id, db)
     user = get_user_by_id(user_id, db)

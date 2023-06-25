@@ -96,12 +96,21 @@ class Event(Base):
         self.notes = notes
 
     def _update_current_amount(self):
-        self.current_amount = sum(contribution.amount for contribution in self.contributions)
+
+        unique_contributions = set()
+        total_amount = 0.0
+
+        for contribution in self.contributions:
+            if contribution.user_id not in unique_contributions:
+                total_amount += contribution.amount
+                unique_contributions.add(contribution.user_id)
+
+        self.current_amount = total_amount
         if self.current_amount >= self.goal:
             self.status = EventStatus.MONEY_COLLECTED
 
     def make_payment(self, user: User) -> None:
-        amount = self.goal/len(self.participants)
+        amount = self.goal / len(self.participants)
         contribution = Contribution(user=user, event=self, amount=amount)
         self.contributions.append(contribution)
         self._update_current_amount()

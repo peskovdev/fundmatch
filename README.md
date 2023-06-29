@@ -1,6 +1,7 @@
 # FundMatch
 > The project was implemented as a result of participation
-> in the "SportTech vs PropTech Hackathon" in Karaganda
+> in the "SportTech vs PropTech Hackathon" in Karaganda.
+> Other project repositories (frontend and mock-payment-service) can be found here: https://gitlab.com/hk-krg-06-23
 
 #### Fundraising and accounting application for the organizing sports team games.
 ##### Contents:

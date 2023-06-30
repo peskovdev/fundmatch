@@ -6,7 +6,7 @@
 #### Fundraising and accounting application for the organizing sports team games.
 ##### Contents:
 - [Project Presentation](#presentation)
-- [Backend (my contribution in the project)](#backend)
+- [Backend (my contribution to the project)](#backend)
 
 # Presentation
 ### Main interface
